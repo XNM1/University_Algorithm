@@ -1,0 +1,102 @@
+<!doctype html>
+
+<html>
+    <head>
+        <title>Нормальний алгоритм Маркова</title>
+    </head>
+    <body>
+        <label style="font-weight:bold; margin-left:8vw;">Правила розбору</label><br>
+        <label>Ліве слово: <input id="rule_left" type="text"/></label>
+        <label>Праве слово: <input id="rule_right" type="text"/></label>
+        <button type="button" onclick="add_rule()">Додати правило</button>
+        <table style="border: solid black 0.01vw" id="rule_table"></table>
+        <label>Вхідне слово: <input id="input_string" type="text"/></label><br>
+        <button type="button" onclick="start()">Старт</button>
+        <pre id="result"></pre>
+
+        <script>
+            var rules = {};
+
+            function add_rule() {
+                rules[rule_left.value] = rule_right.value;
+                let row = document.createElement('tr');
+                let col1 = document.createElement('td');
+                col1.innerText = rule_left.value;
+                let col2 = document.createElement('td');
+                col2.innerText = "→";
+                let col3 = document.createElement('td');
+                if (rule_right.value == "") {
+                    col3.innerText = "/\\";
+                }
+                else {
+                    col3.innerText = rule_right.value;
+                }
+                row.appendChild(col1);
+                row.appendChild(col2);
+                row.appendChild(col3);
+                rule_table.appendChild(row);
+                rule_left.value = "";
+                rule_right.value = "";
+            }
+
+            function nam(input_word, level, origin, all) {
+                if(!origin.includes(input_word)) {
+                    origin.push(input_word);
+                }
+                all.push(input_word);
+                for(var key of Object.keys(rules)) {
+                    if(input_word.includes(key)) {
+                        let spaces = "";
+                        for (let index = 0; index < level; index++) {
+                            spaces += "\t";
+                        }
+
+                        let new_word = input_word.replace(key, rules[key]);
+                        let rule;
+                        if(rules[key] == "") {
+                            rule = "/\\";
+                        }
+                        else {
+                            rule = rules[key];
+                        }
+
+                        result.innerHTML += "\n" + spaces + "level " + level + ": " + input_word + " → " + key + " → " + rule + " → " + new_word + "\n";
+
+                        nam(new_word, ++level, origin, all);
+                        level--;
+                    }
+                }
+            }
+
+            function start() {
+                result.innerHTML = "Розбір слова " + input_string.value + "\n";
+                var origin = [], all = [];
+                nam(input_string.value, 1, origin, all);
+                result.innerHTML += "\nOrigin: " + origin.length + "; All: " + all.length + "; Origin/All: " + ((origin.length/all.length) * 100).toFixed(2) + "%";
+            }
+
+
+            function start1() {
+                var input_word = input_string.value;
+                var is_end = false;
+                do {
+                    var i = 0;
+                    for(var key of Object.keys(rules)){
+                        i++;
+                        if(input_word.includes(key)) {
+                            input_word = input_word.replace(key, rules[key]);
+                            console.log("key: " + key);
+                            console.log("word: " + input_word);
+                            console.log("////////////////");
+                            break;
+                        }
+                        else if (i == Object.keys(rules).length) {
+                            is_end = true;
+                        }
+                    }
+                } while (!is_end);
+                console.log(input_word);
+            }
+        </script>
+    </body>
+</html>
