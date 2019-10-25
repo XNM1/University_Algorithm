@@ -3,18 +3,13 @@ import sys
 import time
 from matplotlib import pyplot as plt
 from matplotlib import animation
+import os
+import psutil
 #endregion
 
 #region `misc`
-def swap(lst, i, j):
-    if i != j:
-        lst[i], lst[j] = lst[j], lst[i]
-
-def compare(item1, item2, descending = False):
-    if item1 > item2:
-        return not descending
-    else:
-        return descending
+pid = os.getpid()
+py = psutil.Process(pid)
 
 def plot(info):
     title = info['title']
@@ -27,9 +22,9 @@ def plot(info):
         plt.ylim(0, max([ j['value'] for j in frames[i]['lst'] ]) + 1)
         plt.xlim(-1, len(frames[i]['lst']))
         if len(frames) - 1 == i:
-            axs.set_title(title + '; Array Access: ' + str(i - 2) + '; Swap operation: ' + str(frames[i]['count']) + '; Time: ' + str(round(frames[i]['time'] * 1000, 3)) + ' ms')
+            axs.set_title(title + '; Array Access: ' + str(i - 2) + '; Memory used: ' + str(frames[i]['memory']) + ' bytes; Time: ' + str(round(frames[i]['time'] * 1000, 3)) + ' ms')
         else:
-            axs.set_title(title + '; Array Access: ' + str(i) + '; Swap operation: ' + str(frames[i]['count']) + '; Time: ' + str(round(frames[i]['time'] * 1000, 3)) + ' ms')
+            axs.set_title(title + '; Array Access: ' + str(i) + '; Memory used: ' + str(frames[i]['memory']) + ' bytes; Time: ' + str(round(frames[i]['time'] * 1000, 3)) + ' ms')
         bars += axs.bar(list(range(len(frames[i]['lst']))),
                         [ j['value'] for j in frames[i]['lst'] ],
                         0.9,
@@ -65,65 +60,70 @@ def words_map(string):
 #endregion
 
 #region `sort algorithms`
-def shell_sort(lst, mapping_func, descending = False, stats = False):
+def counting_sort(lst, mapping_func, descending = False, stats = False):
     if stats:
         start_time = time.time()
         frames = []
-        count_ops = 0
-        frames.append({ 'lst': [ { 'value': mapping_func(l), 'color':'green' } for l in lst], 'time': time.time() - start_time, 'count': count_ops})
+        frames.append({ 'lst': [ { 'value': mapping_func(l), 'color':'green' } for l in lst], 'time': time.time() - start_time, 'memory': py.memory_info().vms})
 
-    ln = int(len(lst))
-    d = ln
-    while True:
-        d = int(d / 2)
-        if (d <= 0):
-            break
-        for g in range(d):
-            for i in range(d + g, ln, d):
-                j = i
-
-                if stats:
-                    frames.append({'lst':[{ 'value': mapping_func(l), 'color':'red' if il == j - d or il == j else 'green'} for il, l in enumerate(lst)], 'time': time.time() - start_time, 'count': count_ops})
-
-                while j >= d and compare(mapping_func(lst[j - d]), mapping_func(lst[j]), descending):
-                    swap(lst, j - d, j)
-                    j -= d
-
-                    if stats:
-                        count_ops += 1
-                        frames.append({'lst':[{ 'value': mapping_func(l), 'color':'orange' if il == j - d or il == j else 'green'} for il, l in enumerate(lst)], 'time': time.time() - start_time, 'count': count_ops})
-
-    if stats:
-        frames.append({'lst':[ { 'value': mapping_func(l), 'color':'blue' } for l in lst], 'time': time.time() - start_time, 'count': count_ops})
-        frames.append({'lst':[ { 'value': mapping_func(l), 'color':'green' } for l in lst], 'time': time.time() - start_time, 'count': count_ops})
-        return { "title": 'Shell Sort', 'frames': frames}
-
-def insertion_sort(lst, mapping_func, descending = False, stats = False):
-    if stats:
-        start_time = time.time()
-        frames = []
-        count_ops = 0
-        frames.append({'lst':[ { 'value': mapping_func(l), 'color':'green' } for l in lst], 'time': time.time() - start_time, 'count': count_ops})
-
-    ln = len(lst)
-    for i in range(ln):
-        j = i
+    rng = max([mapping_func(i) for i in lst]) + 1
+    counting = [ [] for i in range(rng) ]
+    for i in lst:
+        counting[mapping_func(i)].append(i)
 
         if stats:
-            frames.append({'lst':[{ 'value': mapping_func(l), 'color':'red' if il == j - 1 or il == j else 'green'} for il, l in enumerate(lst)], 'time': time.time() - start_time, 'count': count_ops})
+            frames.append({ 'lst': [ { 'value': mapping_func(l), 'color':'red' if l == i else 'green' } for l in lst], 'time': time.time() - start_time, 'memory': py.memory_info().vms})
 
-        while j >= 1 and compare(mapping_func(lst[j - 1]), mapping_func(lst[j]), descending):
-            swap(lst, j - 1, j)
-            j -= 1
+    lst.clear()
+    for i in counting:
+        for j in i:
+            if descending:
+                lst.insert(0, j)
+            else:
+                lst.append(j)
 
             if stats:
-                count_ops += 1
-                frames.append({'lst':[{ 'value': mapping_func(l), 'color':'orange' if il == j - 1 or il == j else 'green'} for il, l in enumerate(lst)], 'time': time.time() - start_time, 'count': count_ops})
+                frames.append({ 'lst': [ { 'value': mapping_func(l), 'color':'green' } for l in lst], 'time': time.time() - start_time, 'memory': py.memory_info().vms})
 
     if stats:
-        frames.append({'lst':[ { 'value': mapping_func(l), 'color':'blue' } for l in lst], 'time': time.time() - start_time, 'count': count_ops})
-        frames.append({'lst':[ { 'value': mapping_func(l), 'color':'green' } for l in lst], 'time': time.time() - start_time, 'count': count_ops})
-        return { "title": 'Insertion Sort', 'frames': frames}
+        frames.append({'lst':[ { 'value': mapping_func(l), 'color':'blue' } for l in lst], 'time': time.time() - start_time, 'memory': py.memory_info().vms})
+        frames.append({'lst':[ { 'value': mapping_func(l), 'color':'green' } for l in lst], 'time': time.time() - start_time, 'memory': py.memory_info().vms})
+        return { "title": 'Counting Sort', 'frames': frames}
+
+def radix_sort_msd(lst, mapping_func, descending = False, stats = False):
+    if stats:
+        start_time = time.time()
+        frames = []
+        frames.append({ 'lst': [ { 'value': mapping_func(l), 'color':'green' } for l in lst], 'time': time.time() - start_time, 'memory': py.memory_info().vms})
+
+    r = len(str(max([mapping_func(i) for i in lst])))
+    digit = 1
+    for k in range(1, r + 1):
+        rng = max(int(mapping_func(i) / digit) % 10 for i in lst) + 1
+        counting = [ [] for i in range(rng) ]
+        for i in lst:
+            counting[int(mapping_func(i) / digit) % 10].append(i)
+
+            if stats:
+                frames.append({ 'lst': [ { 'value': mapping_func(l), 'color':'red' if l == i else 'green' } for l in lst], 'time': time.time() - start_time, 'memory': py.memory_info().vms})
+
+        lst.clear()
+        for i in counting:
+            for j in i:
+                if descending and k == r:
+                    lst.insert(0, j)
+                else:
+                    lst.append(j)
+
+                if stats:
+                    frames.append({ 'lst': [ { 'value': mapping_func(l), 'color':'green' } for l in lst], 'time': time.time() - start_time, 'memory': py.memory_info().vms})
+
+        digit *= 10
+
+    if stats:
+            frames.append({'lst':[ { 'value': mapping_func(l), 'color':'blue' } for l in lst], 'time': time.time() - start_time, 'memory': py.memory_info().vms})
+            frames.append({'lst':[ { 'value': mapping_func(l), 'color':'green' } for l in lst], 'time': time.time() - start_time, 'memory': py.memory_info().vms})
+            return { "title": 'Radix Sort', 'frames': frames}
 #endregion
 
 #region `file`
@@ -153,10 +153,10 @@ def main():
         out_file = sys.argv[2]
 
         algorithm = sys.argv[3]
-        if algorithm == "shell":
-            algorithm = shell_sort
-        elif algorithm == "insertion":
-            algorithm = insertion_sort
+        if algorithm == "counting":
+            algorithm = counting_sort
+        elif algorithm == "radix":
+            algorithm = radix_sort_msd
         else:
             raise Exception("Incorrect algorithm")
 
