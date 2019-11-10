@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="windows-1251"?>
+    <graph_data>
+        <graph id="1">
+            <title>Varinat 6</title>
+            <points>
+                <point id="1" x="0" y="6"/>
+                <point id="2" x="3" y="3"/>
+                <point id="3" x="6" y="0"/>
+                <point id="4" x="9" y="1"/>
+                <point id="5" x="7" y="2"/>
+                <point id="6" x="4" y="6"/>
+                <point id="7" x="8" y="7"/>
+                <point id="8" x="4" y="9"/>
+                <point id="9" x="7" y="8"/>
+            </points>
+            <lines>
+                <line id="1" from="1" to="2" weight="3"/>
+                <line id="2" from="2" to="3" weight="43"/>
+                <line id="3" from="3" to="4" weight="3"/>
+                <line id="4" from="4" to="7" weight="39"/>
+                <line id="5" from="7" to="9" weight="36"/>
+                <line id="6" from="9" to="8" weight="35"/>
+                <line id="7" from="8" to="1" weight="39"/>
+                <line id="8" from="8" to="6" weight="67"/>
+                <line id="9" from="6" to="5" weight="32"/>
+                <line id="10" from="5" to="4" weight="34"/>
+                <line id="11" from="1" to="6" weight="10"/>
+                <line id="12" from="2" to="6" weight="65"/>
+                <line id="13" from="2" to="5" weight="17"/>
+                <line id="14" from="3" to="5" weight="36"/>
+                <line id="15" from="6" to="9" weight="36"/>
+                <line id="16" from="6" to="7" weight="35"/>
+                <line id="17" from="5" to="7" weight="34"/>
+            </lines>
+        </graph>
+    </graph_data>

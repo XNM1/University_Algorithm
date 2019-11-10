@@ -2,3 +2,4 @@ buff.py
 *.txt
 *.docx
 *.doc
+__pycache__
