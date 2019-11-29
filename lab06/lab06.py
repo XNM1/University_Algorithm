@@ -96,13 +96,13 @@ def bfs_classic(matrix, start):
         n = len(matrix)
         visited = [False] * n
         queue = deque()
-        path = [] #*not importend
+        path = []
         #init node
         visited[start] = True
         queue.append(start)
         while queue:
             node = queue.popleft()
-            path.append(node) #*not importend
+            path.append(node)
             for child in get_children(matrix, node):
                 if not visited[child]:
                     queue.append(child)
@@ -117,20 +117,20 @@ def dijkstra_classic(matrix, start):
         done_marks = [False] * n
         queue = deque()
         marks = [inf] * n
-        path = [[]] * n #*not importend
+        path = [[]] * n
         #init node
         visited[start] = True
         marks[start] = 0
         queue.append(start)
-        path[start].append(start) #*not importend
+        path[start].append(start)
         while queue:
             node = queue.popleft()
             for child in get_children(matrix, node):
                 if not done_marks[child] and (marks[node] + matrix[node][child]) < marks[child]:
                         marks[child] = marks[node] + matrix[node][child]
-                        path[child] = [] #*not importend
-                        path[child].extend(path[node]) #*not importend
-                        path[child].append(child) #*not importend
+                        path[child] = []
+                        path[child].extend(path[node])
+                        path[child].append(child)
                 if not visited[child]:
                     queue.append(child)
                     visited[child] = True
@@ -145,13 +145,13 @@ def dijkstra_classic_search(matrix, start, end):
         done_marks = [False] * n
         queue = deque()
         marks = [inf] * n
-        path = [[]] * n #*not importend
+        path = [[]] * n
         nodes = []
         #init node
         visited[start] = True
         marks[start] = 0
         queue.append(start)
-        path[start].append(start) #*not importend
+        path[start].append(start)
         while queue:
             node = queue.popleft()
             nodes.append(node)
@@ -160,9 +160,9 @@ def dijkstra_classic_search(matrix, start, end):
             for child in get_children(matrix, node):
                 if not done_marks[child] and (marks[node] + matrix[node][child]) < marks[child]:
                         marks[child] = marks[node] + matrix[node][child]
-                        path[child] = [] #*not importend
-                        path[child].extend(path[node]) #*not importend
-                        path[child].append(child) #*not importend
+                        path[child] = []
+                        path[child].extend(path[node])
+                        path[child].append(child)
                 if not visited[child]:
                     queue.append(child)
                     visited[child] = True
@@ -176,13 +176,13 @@ def dijkstra_priority_search(matrix, start, end):
         done_marks = [False] * n
         queue = pq.PriorityQueue()
         marks = [inf] * n
-        path = [[]] * n #*not importend
+        path = [[]] * n
         nodes = []
         #init node
         visited[start] = True
         marks[start] = 0
         queue.push(start, 0)
-        path[start].append(start) #*not importend
+        path[start].append(start)
         while queue.len() > 0:
             node = queue.get()
             nodes.append(node)
@@ -192,9 +192,9 @@ def dijkstra_priority_search(matrix, start, end):
                 if not done_marks[child] and (marks[node] + matrix[node][child]) < marks[child]:
                         marks[child] = marks[node] + matrix[node][child]
                         queue.push(child, -marks[child])
-                        path[child] = [] #*not importend
-                        path[child].extend(path[node]) #*not importend
-                        path[child].append(child) #*not importend
+                        path[child] = []
+                        path[child].extend(path[node])
+                        path[child].append(child)
                 if not visited[child]:
                     visited[child] = True
             done_marks[node] = True
@@ -207,13 +207,13 @@ def a_star(matrix, start, end, heuristic):
         done_marks = [False] * n
         queue = pq.PriorityQueue()
         marks = [inf] * n
-        path = [[]] * n #*not importend\
+        path = [[]] * n
         nodes = []
         #init node
         visited[start] = True
         marks[start] = 0
         queue.push(start, 0)
-        path[start].append(start) #*not importend
+        path[start].append(start)
         while queue.len() > 0:
             node = queue.get()
             nodes.append(node)
@@ -223,9 +223,9 @@ def a_star(matrix, start, end, heuristic):
                 if not done_marks[child] and (marks[node] + matrix[node][child]) < marks[child]:
                         marks[child] = marks[node] + matrix[node][child]
                         queue.push(child, -(marks[child] + heuristic(child, end, matrix)))
-                        path[child] = [] #*not importend
-                        path[child].extend(path[node]) #*not importend
-                        path[child].append(child) #*not importend
+                        path[child] = []
+                        path[child].extend(path[node])
+                        path[child].append(child)
                 if not visited[child]:
                     visited[child] = True
             done_marks[node] = True
@@ -238,12 +238,12 @@ def dijkstra_mod_search(matrix, start, end, path_, nodes, depth, done_marks):
         visited = [False] * n
         queue = deque()
         marks = [inf] * n
-        path = [[]] * n #*not importend
+        path = [[]] * n
         #init node
         visited[start] = True
         marks[start] = 0
         queue.append(start)
-        path[start].append(start) #*not importend
+        path[start].append(start)
         while queue:
             node = queue.popleft()
             nodes.append(node)
@@ -252,9 +252,9 @@ def dijkstra_mod_search(matrix, start, end, path_, nodes, depth, done_marks):
             for child in get_children(matrix, node):
                 if child not in path_ and child not in done_marks and (marks[node] + matrix[node][child]) < marks[child]:
                         marks[child] = marks[node] + matrix[node][child]
-                        path[child] = [] #*not importend
-                        path[child].extend(path[node]) #*not importend
-                        path[child].append(child) #*not importend
+                        path[child] = []
+                        path[child].extend(path[node])
+                        path[child].append(child)
                 if depth > 0 and not visited[child] and child not in done_marks:
                     queue.append(child)
                     visited[child] = True
@@ -292,7 +292,7 @@ def main():
             cmp = list(compare_one(dijkstra_classic_search(matrix, i, j), dijkstra_classic_search(matrix, i, j)))
             sum_len += cmp[0]
             sum_path_crr += cmp[1]
-    print('For all path:')
+    print('For all paths:')
     print('Length: ' + str(sum_len/n1) + ' %')
     print('Errors: ' + str(sum_path_crr/n1) + ' %')
     print('----end----\n')
@@ -311,7 +311,7 @@ def main():
             cmp = list(compare_one(dijkstra_classic_search(matrix, i, j), dijkstra_priority_search(matrix, i, j)))
             sum_len += cmp[0]
             sum_path_crr += cmp[1]
-    print('For all path:')
+    print('For all paths:')
     print('Length: ' + str(sum_len/n1) + ' %')
     print('Errors: ' + str(sum_path_crr/n1) + ' %')
     print('----end----\n')
@@ -330,7 +330,7 @@ def main():
             cmp = list(compare_one(dijkstra_classic_search(matrix, i, j), a_star(matrix, i, j, heuristic)))
             sum_len += cmp[0]
             sum_path_crr += cmp[1]
-    print('For all path:')
+    print('For all paths:')
     print('Length: ' + str(sum_len/n1) + ' %')
     print('Errors: ' + str(sum_path_crr/n1) + ' %')
     print('----end----\n')
@@ -348,7 +348,7 @@ def main():
             cmp = list(compare_one(dijkstra_classic_search(matrix, i, j), a_star(matrix, i, j, heuristic2)))
             sum_len += cmp[0]
             sum_path_crr += cmp[1]
-    print('For all path:')
+    print('For all paths:')
     print('Length: ' + str(sum_len/n1) + ' %')
     print('Errors: ' + str(sum_path_crr/n1) + ' %')
     print('----end----\n')
@@ -378,7 +378,7 @@ def main():
             cmp = list(compare_one(dijkstra_classic_search(matrix, i, j), [nodes, path]))
             sum_len += cmp[0]
             sum_path_crr += cmp[1]
-    print('For all path:')
+    print('For all paths:')
     print('Length: ' + str(sum_len/n1) + ' %')
     print('Errors: ' + str(sum_path_crr/n1) + ' %')
     print('----end----')

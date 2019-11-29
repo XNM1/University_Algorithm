@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="windows-1251"?>
+    <graph_data>
+        <graph id="1">
+            <title>Varinat 6</title>
+            <points>
+                <point id="1" x="0" y="0"/>
+                <point id="2" x="0" y="0"/>
+                <point id="3" x="0" y="0"/>
+                <point id="4" x="0" y="0"/>
+                <point id="5" x="0" y="0"/>
+                <point id="6" x="0" y="0"/>
+                <point id="7" x="0" y="0"/>
+                <point id="8" x="0" y="0"/>
+                <point id="9" x="0" y="0"/>
+                <point id="10" x="0" y="0"/>
+                <point id="11" x="0" y="0"/>
+            </points>
+            <lines>
+                <line id="1" from="1" to="2" weight="21" power="20"/>
+                <line id="2" from="2" to="6" weight="21" power="20"/>
+                <line id="3" from="1" to="3" weight="15" power="9"/>
+                <line id="4" from="1" to="4" weight="8" power="3"/>
+                <line id="5" from="2" to="3" weight="26" power="8"/>
+                <line id="6" from="4" to="3" weight="6" power="3"/>
+                <line id="7" from="3" to="6" weight="14" power="5"/>
+                <line id="8" from="6" to="8" weight="8" power="6"/>
+                <line id="9" from="3" to="8" weight="9" power="5"/>
+                <line id="10" from="4" to="5" weight="9" power="6"/>
+                <line id="11" from="3" to="5" weight="21" power="20"/>
+                <line id="12" from="3" to="7" weight="14" power="5"/>
+                <line id="13" from="5" to="7" weight="8" power="6"/>
+                <line id="14" from="7" to="8" weight="17" power="3"/>
+                <line id="15" from="8" to="11" weight="18" power="2"/>
+                <line id="16" from="4" to="9" weight="18" power="2"/>
+                <line id="17" from="9" to="10" weight="4" power="3"/>
+                <line id="18" from="5" to="10" weight="4" power="3"/>
+                <line id="19" from="10" to="11" weight="21" power="20"/>
+            </lines>
+        </graph>
+    </graph_data>
