@@ -64,6 +64,22 @@ def find_augment_path(matrix, flow, start, end, pathes):
             return path
     return None
 
+def get_bottleneck(matrix, flow, path):
+    min_flow = inf
+    for i in range(1, len(path)):
+        if matrix[path[i - 1]][path[i]] - flow[path[i - 1]][path[i]] < min_flow:
+            min_flow = matrix[path[i - 1]][path[i]] - flow[path[i - 1]][path[i]]
+    return min_flow
+
+def set_flow(matrix, flow, path, min_flow):
+    for i in range(1, len(path)):
+        if flow[path[i - 1]][path[i]] + min_flow > matrix[path[i - 1]][path[i]]:
+            flow[path[i - 1]][path[i]] -= min_flow
+            flow[path[i]][path[i - 1]] -= min_flow
+        else:
+            flow[path[i - 1]][path[i]] += min_flow
+            flow[path[i]][path[i - 1]] += min_flow
+
 def max_flow(matrix, start, end):
     #init
     pathes = []
@@ -74,20 +90,10 @@ def max_flow(matrix, start, end):
     flow = [[0] * n for i in range(n)]
     while True:
         path = find_augment_path(matrix, flow, start, end, pathes)
-        min_flow = inf
         if path is None:
             return flow
-        pathes.remove(path)
-        for i in range(1, len(path)):
-            if matrix[path[i - 1]][path[i]] - flow[path[i - 1]][path[i]] < min_flow:
-                min_flow = matrix[path[i - 1]][path[i]] - flow[path[i - 1]][path[i]]
-        for i in range(1, len(path)):
-            if flow[path[i - 1]][path[i]] + min_flow > matrix[path[i - 1]][path[i]]:
-                flow[path[i - 1]][path[i]] -= min_flow
-                flow[path[i]][path[i - 1]] -= min_flow
-            else:
-                flow[path[i - 1]][path[i]] += min_flow
-                flow[path[i]][path[i - 1]] += min_flow
+        bottleneck = get_bottleneck(matrix, flow, path)
+        set_flow(matrix, flow, path, bottleneck)
 
 def is_matrix(matrix):
     return len(matrix) > 0 and len(matrix[0]) == len(matrix)
