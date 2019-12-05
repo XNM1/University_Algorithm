@@ -4,9 +4,9 @@ def get_comb(num):
     return comb
 
 def get_comb_rec(comb, visited, tail, num):
-    temp = tail.copy()
     visited.append(num)
     for i in range(1, int((num) / 2) + 1):
+        temp = tail.copy()
         pair = []
         pair.append(num - i)
         pair.append(i)
@@ -17,7 +17,7 @@ def get_comb_rec(comb, visited, tail, num):
                 tail.remove(j)
                 get_comb_rec(comb, visited, tail, j)
                 tail.append(j)
-        tail = temp.copy()
+        tail = temp
 
 def show(comb, num):
     s= str(num)
